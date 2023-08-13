@@ -8,14 +8,45 @@
             }
 
             canvas {
-                display: block;
-                background: #FFF;
+                position: absolute;
+                top: 0;
+                left: 0;
                 margin: auto;
+                min-width: 100%;
+            }
+            #canvas {
+                z-index: 1;
+            }
+            #water {
+                z-index: 0;
+            }
+            #background {
+                z-index: 2;
+                image-rendering: pixelated;
+                image-rendering: -moz-crisp-edges;
+                image-rendering: crisp-edges;
+
+            }
+            .canvas-container {
+                position: relative;
+                width: 1024px;
+                height: 1024px;
+                margin: auto;
+            }
+            @media (max-width: 1980px) {
+                .canvas-container {
+                    max-width: 512px;
+                }
             }
         </style>
     </head>
     <body>
-        <canvas id="canvas" width="256" height="256"></canvas>
+        <!-- stack canvases on top of each other-->
+        <div class="canvas-container">
+            <canvas id="canvas" width="256" height="256"></canvas>
+            <canvas id="water" width="256" height="256"></canvas>
+            <canvas id="background" width="256" height="256"></canvas>
+        </div>
     </body>
     <script src="main.js"></script>
 </html>
