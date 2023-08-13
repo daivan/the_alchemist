@@ -17,10 +17,11 @@
             #canvas {
                 z-index: 1;
             }
-            #water {
+            #cauldron-water {
                 z-index: 0;
             }
-            #background {
+            #cauldron-frame
+             {
                 z-index: 2;
                 image-rendering: pixelated;
                 image-rendering: -moz-crisp-edges;
@@ -44,8 +45,9 @@
         <!-- stack canvases on top of each other-->
         <div class="canvas-container">
             <canvas id="canvas" width="256" height="256"></canvas>
-            <canvas id="water" width="256" height="256"></canvas>
-            <canvas id="background" width="256" height="256"></canvas>
+            <canvas id="cauldron-water" width="256" height="256"></canvas>
+            <canvas id="cauldron-frame
+            " width="256" height="256"></canvas>
         </div>
     </body>
     <script src="main.js"></script>
