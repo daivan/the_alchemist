@@ -1,4 +1,4 @@
-import { initPointer, track, init, Sprite, GameLoop } from 'kontra';
+import { initInput, onInput, initPointer, track, init, Sprite, GameLoop } from 'kontra';
 
 let { canvas } = init();
 
@@ -25,7 +25,40 @@ cauldronFrame.onload = () => {
   // functions will work
   initPointer();
 
+  initInput();
+
   var ladlePosition = 0;
+
+  let heatTemperatureGoal = Sprite({
+    x: 238,        // starting x,y position of the sprite.
+    y: 70,
+    color: 'purple',  // fill color of the sprite rectangle
+    width: 8,     // width and height of the sprite rectangle
+    height: 30,
+  });
+  
+  let heatTemperature = Sprite({
+    temperatureValue: 100,
+    x: 240,        // starting x,y position of the sprite.
+    y: 10,
+    color: 'green',  // fill color of the sprite rectangle
+    width: 4,     // width and height of the sprite rectangle
+    height: 100,
+    update: function(dt) {
+      this.temperatureValue = this.temperatureValue - 10 * dt;
+      this.height = this.temperatureValue;
+      if (this.temperatureValue < 60 || this.temperatureValue > 90) {
+        this.color = 'red';
+      }else{
+        this.color = 'green';
+      }
+    }
+  });
+  
+  onInput(['space'], function(e) {
+    heatTemperature.temperatureValue = heatTemperature.temperatureValue + 10;
+    console.log(' *** space pressed ***')
+  });
 
   let leftUpper = Sprite({
     x: 28,        // starting x,y position of the sprite.
@@ -125,11 +158,12 @@ cauldronFrame.onload = () => {
   track(rightLower);
 
   let loop = GameLoop({  // create the main game loop
-    update: function () { // update the game state
+    update: function (dt) { // update the game state
       leftUpper.update();
       rightUpper.update();
       leftLower.update();
       rightLower.update();
+      heatTemperature.update(dt);
 
     },
     render: function () { // render the game state
@@ -137,6 +171,8 @@ cauldronFrame.onload = () => {
       rightUpper.render();
       leftLower.render();
       rightLower.render();
+      heatTemperatureGoal.render();
+      heatTemperature.render();
     }
   });
 
