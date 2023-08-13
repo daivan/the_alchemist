@@ -1,0 +1,26 @@
+{
+  "name": "placeholder",
+  "version": "1.0.0",
+  "description": "## Placeholder description",
+  "private": true,
+  "scripts": {
+    "start": "webpack serve --open",
+    "watch": "webpack --watch",
+    "build": "webpack",
+    "zip": "bestzip ./dist.zip ./dist/*",
+    "build-zip": "npm run build && npm run zip"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "bestzip": "^2.2.1",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "esbuild": "0.18.18",
+    "kontra": "^9.0.0",
+    "zzfx": "^1.2.0"
+  }
+}
