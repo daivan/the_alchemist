@@ -51,6 +51,25 @@ let heatTemperatureGoal = Sprite({
   height: 30,
 });
 
+let recipieTimer = Sprite({
+  timeGoal : 60,
+  timeLeft: 60, 
+  x: 10,        // starting x,y position of the sprite.
+  y: 240,
+  color: 'green',  // fill color of the sprite rectangle
+  width: 240,     // width and height of the sprite rectangle
+  height: 4,
+  update: function (dt) {
+    this.timeLeft = this.timeLeft - 3 * dt;
+    this.width = 240 - ((this.timeLeft / this.timeGoal) * 240);
+    if (this.timeLeft < 30) {
+      this.color = 'orange';
+    } else if (this.timeLeft < 15) {
+      this.color = 'red';
+    }
+  }
+});
+
 let heatTemperature = Sprite({
   temperatureValue: 100,
   x: 240,        // starting x,y position of the sprite.
@@ -191,6 +210,7 @@ let loop = GameLoop({  // create the main game loop
     leftLower.update();
     rightLower.update();
     heatTemperature.update(dt);
+    recipieTimer.update(dt);
     dtCounter += dt;
     if (isBoiling && dtCounter > 0.1 && spritesToRender.bubbles.length < 15) {
       const [x, y] = getRandomCordsInCaulrdon(canvas);
@@ -224,6 +244,7 @@ let loop = GameLoop({  // create the main game loop
     rightLower.render();
     heatTemperatureGoal.render();
     heatTemperature.render();
+    recipieTimer.render();
   }
 });
 
