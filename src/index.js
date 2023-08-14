@@ -5,6 +5,7 @@ import getSprite from './Sprites/Sprite';
 import getBubbleSpritesheet from './Sprites/Bubble';
 import getStrokeSpritesheet from './Sprites/StrokeSpritesheet';
 import getRandomCordsInCaulrdon from './RandomCordsInCaulron';
+import getBackgroundPattern from './BackgroundPattern';
 
 let { canvas, context } = init();
 context.imageSmoothingEnabled = false;
@@ -15,6 +16,12 @@ cauldronFrameCtx.imageSmoothingEnabled = false;
 
 const cauldronWaterCanvas = document.getElementById('cauldron-water');
 const cauldronWaterCtx = cauldronWaterCanvas.getContext('2d');
+
+const backgroundCanvas = document.getElementById('background');
+const backgroundCtx = backgroundCanvas.getContext('2d');
+const backgroundPattern = backgroundCtx.createPattern(getBackgroundPattern(), "repeat");
+backgroundCtx.fillStyle = backgroundPattern;
+backgroundCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
 const assets = await loadAssets();
 const bubbleSpritesheet = getBubbleSpritesheet(assets[1]);
@@ -185,7 +192,7 @@ let loop = GameLoop({  // create the main game loop
     rightLower.update();
     heatTemperature.update(dt);
     dtCounter += dt;
-    if (isBoiling && dtCounter > 0.3 && spritesToRender.bubbles.length < 15) {
+    if (isBoiling && dtCounter > 0.1 && spritesToRender.bubbles.length < 15) {
       const [x, y] = getRandomCordsInCaulrdon(canvas);
       spritesToRender.bubbles.push(getSprite(bubbleSpritesheet, x, y, (Math.random() + 10) / 2));
       dtCounter = 0.0;
