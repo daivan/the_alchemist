@@ -15,14 +15,17 @@
                 min-width: 100%;
             }
             #canvas {
-                z-index: 2;
+                z-index: 3;
             }
             #cauldron-water {
+                z-index: 1;
+            }
+            #background {
                 z-index: 0;
             }
             #cauldron-frame
              {
-                z-index: 1;
+                z-index: 2;
                 image-rendering: pixelated;
                 image-rendering: -moz-crisp-edges;
                 image-rendering: crisp-edges;
@@ -48,6 +51,7 @@
             <canvas id="canvas" width="256" height="256"></canvas>
             <canvas id="cauldron-water" width="256" height="256"></canvas>
             <canvas id="cauldron-frame" width="256" height="256"></canvas>
+            <canvas id="background" width="256" height="256"></canvas>
         </div>
     </body>
     <script src="main.js"></script>
