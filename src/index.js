@@ -1,9 +1,13 @@
-import { initInput, onInput, initPointer, track, init, Sprite, GameLoop } from 'kontra';
+import { initInput, onInput, initPointer, track, init, Sprite, GameLoop, getPointer } from 'kontra';
 import loadAssets from './AssetsLoader';
-// import getImagesUrls from './AssetsUrls';
 import drawWater from './DrawWater';
+import getSprite from './Sprites/Sprite';
+import getBubbleSpritesheet from './Sprites/Bubble';
+import getStrokeSpritesheet from './Sprites/StrokeSpritesheet';
+import getRandomCordsInCaulrdon from './RandomCordsInCaulron';
 
-let { canvas } = init();
+let { canvas, context } = init();
+context.imageSmoothingEnabled = false;
 
 const cauldronFrameCanvas = document.getElementById('cauldron-frame');
 const cauldronFrameCtx = cauldronFrameCanvas.getContext('2d');
@@ -13,8 +17,14 @@ const cauldronWaterCanvas = document.getElementById('cauldron-water');
 const cauldronWaterCtx = cauldronWaterCanvas.getContext('2d');
 
 const assets = await loadAssets();
+const bubbleSpritesheet = getBubbleSpritesheet(assets[1]);
+const strokeSpritesheet = getStrokeSpritesheet(assets[2]);
 cauldronFrameCtx.drawImage(assets[0], 0, 0, cauldronFrameCanvas.width, cauldronFrameCanvas.height);
 drawWater(cauldronWaterCanvas, cauldronWaterCtx, '#aa4d8d');
+const spritesToRender = {
+  strokes: [],
+  bubbles: []
+};
 
 // this function must be called first before pointer
 // functions will work
@@ -23,6 +33,8 @@ initPointer();
 initInput();
 
 var ladlePosition = 0;
+
+let isBoiling = true;
 
 let heatTemperatureGoal = Sprite({
   x: 238,        // starting x,y position of the sprite.
@@ -64,7 +76,9 @@ let leftUpper = Sprite({
   onOver: function () {
     // handle on over events on the sprite
     if (ladlePosition === 0) {
-      this.color = '#ff00ff33';
+      if (spritesToRender.strokes.length === 0) {
+        addStroke();
+      }
     }
   },
   onOut: function () {
@@ -86,7 +100,9 @@ let rightUpper = Sprite({
   onOver: function () {
     // handle on over events on the sprite
     if (ladlePosition === 1) {
-      this.color = '#ff00ff33';
+      if (spritesToRender.strokes.length === 0) {
+        addStroke();
+      }
     }
   },
   onOut: function () {
@@ -109,7 +125,9 @@ let rightLower = Sprite({
   onOver: function () {
     // handle on over events on the sprite
     if (ladlePosition === 2) {
-      this.color = '#ff00ff33';
+      if (spritesToRender.strokes.length === 0) {
+        addStroke();
+      }
     }
   },
   onOut: function () {
@@ -131,7 +149,9 @@ let leftLower = Sprite({
   onOver: function () {
     // handle on over events on the sprite
     if (ladlePosition === 3) {
-      this.color = '#ff00ff33';
+      if (spritesToRender.strokes.length === 0) {
+        addStroke();
+      }
     } else {
       this.color = '#0000ff00';
     }
@@ -152,16 +172,45 @@ track(rightUpper);
 track(leftLower);
 track(rightLower);
 
+let dtCounter = 0.0;
+
 let loop = GameLoop({  // create the main game loop
   update: function (dt) { // update the game state
+    spritesToRender.strokes.forEach(sprite => {
+      sprite.update();
+    });
     leftUpper.update();
     rightUpper.update();
     leftLower.update();
     rightLower.update();
     heatTemperature.update(dt);
+    dtCounter += dt;
+    if (isBoiling && dtCounter > 0.3 && spritesToRender.bubbles.length < 15) {
+      const [x, y] = getRandomCordsInCaulrdon(canvas);
+      spritesToRender.bubbles.push(getSprite(bubbleSpritesheet, x, y, (Math.random() + 10) / 2));
+      dtCounter = 0.0;
+    }
+    spritesToRender.bubbles.forEach(sprite => {
+      sprite.update();
+    });
+
 
   },
   render: function () { // render the game state
+    spritesToRender.strokes.forEach((stroke, index) => {
+      if (stroke.currentAnimation.isStopped) {
+        spritesToRender.strokes.splice(index, 1);
+      } else {
+        stroke.render();
+      }
+    });
+    spritesToRender.bubbles.forEach((sprite, index) => {
+      if (sprite.currentAnimation.isStopped) {
+        spritesToRender.bubbles.splice(index, 1);
+      } else {
+        sprite.render();
+      }
+    });
     leftUpper.render();
     rightUpper.render();
     leftLower.render();
@@ -174,3 +223,7 @@ let loop = GameLoop({  // create the main game loop
 loop.start();    // start the game
 // }
 
+function addStroke(scale = 1) {
+  const pointer = getPointer();
+  spritesToRender.strokes.push(getSprite(strokeSpritesheet, pointer.x, pointer.y, scale));
+}

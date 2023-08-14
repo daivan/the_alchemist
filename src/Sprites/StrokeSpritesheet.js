@@ -8,8 +8,10 @@ export default function getStrokeSpritesheet(image) {
         animations: {
             swirl: {
                 frames: '0..6',
-                frameRate: 30
+                frameRate: 10,
+                loop: false
             }
-        }
+        },
+        name: 'stroke'
     });
 }
