@@ -6,9 +6,10 @@ export default function getBubbleSpritesheet(image) {
         frameWidth: 32,
         frameHeight: 32,
         animations: {
-            swirl: {
+            bubble: {
                 frames: '0..6',
-                frameRate: 30
+                frameRate: 5,
+                loop: false
             }
         }
     });
