@@ -1,4 +1,4 @@
-export default function loadAssets(urls) {
+export default function loadAssets() {
     return Promise.all(urls.map(loadAsset));
 }
 
@@ -10,3 +10,9 @@ function loadAsset(url) {
         image.src = url;
     });
 }
+
+const urls = [
+    './assets/cauldron.png',
+    './assets/bubble.png',
+    './assets/stroke.png'
+];

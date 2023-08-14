@@ -1,6 +1,6 @@
 import { initInput, onInput, initPointer, track, init, Sprite, GameLoop } from 'kontra';
 import loadAssets from './AssetsLoader';
-import getImagesUrls from './AssetsUrls';
+// import getImagesUrls from './AssetsUrls';
 import drawWater from './DrawWater';
 
 let { canvas } = init();
@@ -12,18 +12,8 @@ cauldronFrameCtx.imageSmoothingEnabled = false;
 const cauldronWaterCanvas = document.getElementById('cauldron-water');
 const cauldronWaterCtx = cauldronWaterCanvas.getContext('2d');
 
-//draw ./assets/cauldron.png on cauldronFrameCanvas
-const assets = await loadAssets(getImagesUrls());
-// console.log(assets);
-// const cauldronFrame = new Image();
-// cauldronFrame.src = './assets/cauldron.png';
-// cauldronFrame.onload = () => {
+const assets = await loadAssets();
 cauldronFrameCtx.drawImage(assets[0], 0, 0, cauldronFrameCanvas.width, cauldronFrameCanvas.height);
-//draw a circle on cauldronWaterCanvas radius 50% of cauldronFrameCanvas
-// cauldronWaterCtx.beginPath();
-// cauldronWaterCtx.arc(cauldronWaterCanvas.width / 2, cauldronWaterCanvas.height / 2, cauldronWaterCanvas.width / 2.7, 0, 2 * Math.PI);
-// cauldronWaterCtx.fillStyle = '#aa4d8d';
-// cauldronWaterCtx.fill();
 drawWater(cauldronWaterCanvas, cauldronWaterCtx, '#aa4d8d');
 
 // this function must be called first before pointer
