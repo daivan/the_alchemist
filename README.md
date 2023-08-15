@@ -5,6 +5,7 @@ We use these:
  - (esbuild) https://esbuild.github.io/getting-started
  - (zip) https://github.com/nfriedly/node-bestzip
  - (sound effects) https://github.com/KilledByAPixel/ZzFX
+ - (TinyPNG) https://tinypng.com
 
 ## Start working on the project
 Make sure to run the watch command to compile the code everytime you make a change:
