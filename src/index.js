@@ -28,7 +28,7 @@ const assets = await loadAssets();
 const bubbleSpritesheet = getBubbleSpritesheet(assets[1]);
 const strokeSpritesheet = getStrokeSpritesheet(assets[2]);
 cauldronFrameCtx.drawImage(assets[0], 0, 0, cauldronFrameCanvas.width / 2, cauldronFrameCanvas.height);
-cauldronFrameCtx.drawImage(assets[3], cauldronFrameCanvas.width / 2, 0, cauldronFrameCanvas.width / 2, cauldronFrameCanvas.height);
+cauldronFrameCtx.drawImage(assets[3], cauldronFrameCanvas.width / 2 - 5, 0, cauldronFrameCanvas.width / 2 - 5, cauldronFrameCanvas.height);
 drawWater(cauldronWaterCanvas, cauldronWaterCtx, '#aa4d8d');
 const spritesToRender = {
   strokes: [],
