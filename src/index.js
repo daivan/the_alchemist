@@ -1,4 +1,5 @@
 import { initInput, onInput, initPointer, track, init, Sprite, GameLoop, getPointer } from 'kontra';
+// import { initInput, onInput, initPointer, init, Sprite, GameLoop } from 'kontra';
 import loadAssets from './AssetsLoader';
 import drawWater from './DrawWater';
 import getSprite from './Sprites/Sprite';
@@ -10,11 +11,11 @@ import getBackgroundPattern from './BackgroundPattern';
 let { canvas, context } = init();
 context.imageSmoothingEnabled = false;
 
-const cauldronFrameCanvas = document.getElementById('cauldron-frame');
+const cauldronFrameCanvas = document.getElementById('frame');
 const cauldronFrameCtx = cauldronFrameCanvas.getContext('2d');
 cauldronFrameCtx.imageSmoothingEnabled = false;
 
-const cauldronWaterCanvas = document.getElementById('cauldron-water');
+const cauldronWaterCanvas = document.getElementById('water');
 const cauldronWaterCtx = cauldronWaterCanvas.getContext('2d');
 
 const backgroundCanvas = document.getElementById('background');
@@ -26,7 +27,8 @@ backgroundCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 const assets = await loadAssets();
 const bubbleSpritesheet = getBubbleSpritesheet(assets[1]);
 const strokeSpritesheet = getStrokeSpritesheet(assets[2]);
-cauldronFrameCtx.drawImage(assets[0], 0, 0, cauldronFrameCanvas.width, cauldronFrameCanvas.height);
+cauldronFrameCtx.drawImage(assets[0], 0, 0, cauldronFrameCanvas.width / 2, cauldronFrameCanvas.height);
+cauldronFrameCtx.drawImage(assets[3], cauldronFrameCanvas.width / 2, 0, cauldronFrameCanvas.width / 2, cauldronFrameCanvas.height);
 drawWater(cauldronWaterCanvas, cauldronWaterCtx, '#aa4d8d');
 const spritesToRender = {
   strokes: [],
@@ -52,8 +54,8 @@ let heatTemperatureGoal = Sprite({
 });
 
 let recipieTimer = Sprite({
-  timeGoal : 60,
-  timeLeft: 60, 
+  timeGoal: 60,
+  timeLeft: 60,
   x: 10,        // starting x,y position of the sprite.
   y: 240,
   color: 'green',  // fill color of the sprite rectangle
