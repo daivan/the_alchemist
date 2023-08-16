@@ -255,5 +255,5 @@ loop.start();    // start the game
 
 function addStroke(scale = 1) {
   const pointer = getPointer();
-  spritesToRender.strokes.push(getSprite(strokeSpritesheet, pointer.x, pointer.y, scale));
+  spritesToRender.strokes.push(getSprite(strokeSpritesheet, Math.floor(pointer.x), Math.floor(pointer.y), scale));
 }
