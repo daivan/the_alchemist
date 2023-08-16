@@ -14,5 +14,6 @@ function loadAsset(url) {
 const urls = [
     './assets/cauldron.png',
     './assets/bubble.png',
-    './assets/stroke.png'
+    './assets/stroke.png',
+    './assets/table.png'
 ];
