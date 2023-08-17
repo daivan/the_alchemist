@@ -1,4 +1,4 @@
-import { initInput, onInput, initPointer, track, init, Sprite, GameLoop, getPointer } from 'kontra';
+import { initInput, onInput, initPointer, track, init, Sprite, GameLoop, getPointer, Text } from 'kontra';
 // import { initInput, onInput, initPointer, init, Sprite, GameLoop } from 'kontra';
 import loadAssets from './AssetsLoader';
 import drawWater from './DrawWater';
@@ -7,6 +7,11 @@ import getBubbleSpritesheet from './Sprites/Bubble';
 import getStrokeSpritesheet from './Sprites/StrokeSpritesheet';
 import getRandomCordsInCaulrdon from './RandomCordsInCaulron';
 import getBackgroundPattern from './BackgroundPattern';
+import GameState from './GameState';
+
+let gameState = new GameState(0);
+
+gameState.reset();
 
 let { canvas, context } = init();
 context.imageSmoothingEnabled = false;
@@ -44,6 +49,19 @@ initInput();
 var ladlePosition = 0;
 
 let isBoiling = true;
+
+let roundGoal = {
+ spinn: 10
+}
+
+let recipeText = Text({
+  text: 'Stir clockwise 10 times\n\nYou have 10 seconds',
+  font: '12px Arial',
+  color: 'black',
+  x: 315,
+  y: 55,
+  textAlign: 'left'
+});
 
 let heatTemperatureGoal = Sprite({
   x: 238,        // starting x,y position of the sprite.
@@ -91,6 +109,12 @@ let heatTemperature = Sprite({
 });
 
 onInput(['space'], function (e) {
+
+  if (gameState.state === 'start_screen' || gameState.state === 'game_over') {
+    gameState.gameStarted = true;
+    gameState.state = 'playing';
+  }
+
   heatTemperature.temperatureValue = heatTemperature.temperatureValue + 10;
   console.log(' *** space pressed ***')
 });
@@ -202,11 +226,14 @@ track(rightLower);
 
 let dtCounter = 0.0;
 
+
 let loop = GameLoop({  // create the main game loop
   update: function (dt) { // update the game state
+    gameState.update(dt);
     spritesToRender.strokes.forEach(sprite => {
       sprite.update();
     });
+
     leftUpper.update();
     rightUpper.update();
     leftLower.update();
@@ -226,6 +253,7 @@ let loop = GameLoop({  // create the main game loop
 
   },
   render: function () { // render the game state
+    
     spritesToRender.strokes.forEach((stroke, index) => {
       if (stroke.currentAnimation.isStopped) {
         spritesToRender.strokes.splice(index, 1);
@@ -247,6 +275,9 @@ let loop = GameLoop({  // create the main game loop
     heatTemperatureGoal.render();
     heatTemperature.render();
     recipieTimer.render();
+    recipeText.render();
+
+    gameState.render();
   }
 });
 
