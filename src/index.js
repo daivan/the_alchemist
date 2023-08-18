@@ -1,12 +1,15 @@
 import { initInput, onInput, initPointer, track, init, Sprite, GameLoop, getPointer } from 'kontra';
-// import { initInput, onInput, initPointer, init, Sprite, GameLoop } from 'kontra';
-import loadAssets from './AssetsLoader';
+import { loadAsset, spliceAssets } from './AssetsLoader';
 import drawWater from './DrawWater';
 import getSprite from './Sprites/Sprite';
 import getBubbleSpritesheet from './Sprites/Bubble';
 import getStrokeSpritesheet from './Sprites/StrokeSpritesheet';
 import getRandomCordsInCaulrdon from './RandomCordsInCaulron';
 import getBackgroundPattern from './BackgroundPattern';
+import getRecipes from './Recipes';
+import getRecipeTimerText from './RecipeTimer';
+import { createRecipeText } from './RecipeText';
+import getScreenSize from './TextCanvasResize';
 
 let { canvas, context } = init();
 context.imageSmoothingEnabled = false;
@@ -24,25 +27,44 @@ const backgroundPattern = backgroundCtx.createPattern(getBackgroundPattern(), "r
 backgroundCtx.fillStyle = backgroundPattern;
 backgroundCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
-const assets = await loadAssets();
+const textCanvas = document.getElementById('text');
+console.log(textCanvas);
+const [textWidth, textHeight] = getScreenSize();
+console.log(textWidth, textHeight);
+textCanvas.width = textWidth;
+textCanvas.height = textHeight;
+const textCtx = textCanvas.getContext('2d');
+const textCanvasFactor = textCanvas.width / 512;
+
+const allSprites = await loadAsset();
+const assets = spliceAssets(allSprites);
+
 const bubbleSpritesheet = getBubbleSpritesheet(assets[1]);
-const strokeSpritesheet = getStrokeSpritesheet(assets[2]);
-cauldronFrameCtx.drawImage(assets[0], 0, 0, cauldronFrameCanvas.width / 2, cauldronFrameCanvas.height);
+const strokeSpritesheet = getStrokeSpritesheet(assets[0]);
+cauldronFrameCtx.drawImage(assets[2], 0, 0, cauldronFrameCanvas.width / 2, cauldronFrameCanvas.height);
 cauldronFrameCtx.drawImage(assets[3], cauldronFrameCanvas.width / 2 - 5, 0, cauldronFrameCanvas.width / 2 - 5, cauldronFrameCanvas.height);
+cauldronFrameCtx.fillStyle = '#e8d5b0';
+cauldronFrameCtx.beginPath();
+cauldronFrameCtx.arc(32, 32, 24, 0, Math.PI * 2, true);
+cauldronFrameCtx.fill();
 drawWater(cauldronWaterCanvas, cauldronWaterCtx, '#aa4d8d');
 const spritesToRender = {
   strokes: [],
   bubbles: []
 };
 
-// this function must be called first before pointer
-// functions will work
-initPointer();
+const recipes = getRecipes();
+let currentRecipe = recipes[1];
+const timerText = getRecipeTimerText(currentRecipe.time);
+const recipeTexts = [];
+currentRecipe.instructions.forEach((instruction, index) => {
+  recipeTexts.push(createRecipeText(instruction, 296, 52 + index * 20));
+});
 
+initPointer();
 initInput();
 
 var ladlePosition = 0;
-
 let isBoiling = true;
 
 let heatTemperatureGoal = Sprite({
@@ -53,24 +75,24 @@ let heatTemperatureGoal = Sprite({
   height: 30,
 });
 
-let recipieTimer = Sprite({
-  timeGoal: 60,
-  timeLeft: 60,
-  x: 10,        // starting x,y position of the sprite.
-  y: 240,
-  color: 'green',  // fill color of the sprite rectangle
-  width: 240,     // width and height of the sprite rectangle
-  height: 4,
-  update: function (dt) {
-    this.timeLeft = this.timeLeft - 3 * dt;
-    this.width = 240 - ((this.timeLeft / this.timeGoal) * 240);
-    if (this.timeLeft < 30) {
-      this.color = 'orange';
-    } else if (this.timeLeft < 15) {
-      this.color = 'red';
-    }
-  }
-});
+// let recipieTimer = Sprite({
+//   timeGoal: 60,
+//   timeLeft: 60,
+//   x: 10,        // starting x,y position of the sprite.
+//   y: 240,
+//   color: 'green',  // fill color of the sprite rectangle
+//   width: 240,     // width and height of the sprite rectangle
+//   height: 4,
+//   update: function (dt) {
+//     this.timeLeft = this.timeLeft - 3 * dt;
+//     this.width = 240 - ((this.timeLeft / this.timeGoal) * 240);
+//     if (this.timeLeft < 30) {
+//       this.color = 'orange';
+//     } else if (this.timeLeft < 15) {
+//       this.color = 'red';
+//     }
+//   }
+// });
 
 let heatTemperature = Sprite({
   temperatureValue: 100,
@@ -201,9 +223,12 @@ track(leftLower);
 track(rightLower);
 
 let dtCounter = 0.0;
+const startTime = Date.now();
+let timeElapsed = 0;
 
 let loop = GameLoop({  // create the main game loop
   update: function (dt) { // update the game state
+    timeElapsed = Date.now() - startTime;
     spritesToRender.strokes.forEach(sprite => {
       sprite.update();
     });
@@ -211,8 +236,11 @@ let loop = GameLoop({  // create the main game loop
     rightUpper.update();
     leftLower.update();
     rightLower.update();
+    if (timeElapsed < currentRecipe.time * 1000) {
+      timerText.update(Math.ceil((currentRecipe.time - timeElapsed / 1000)));
+    }
     heatTemperature.update(dt);
-    recipieTimer.update(dt);
+    // recipieTimer.update(dt);
     dtCounter += dt;
     if (isBoiling && dtCounter > 0.1 && spritesToRender.bubbles.length < 15) {
       const [x, y] = getRandomCordsInCaulrdon(canvas);
@@ -244,9 +272,12 @@ let loop = GameLoop({  // create the main game loop
     rightUpper.render();
     leftLower.render();
     rightLower.render();
+    textCtx.clearRect(0, 0, textCanvas.width, textCanvas.height);
+    timerText.render(textCtx, textCanvasFactor);
+    recipeTexts.forEach(text => text.render(textCtx, textCanvasFactor));
     heatTemperatureGoal.render();
     heatTemperature.render();
-    recipieTimer.render();
+    // recipieTimer.render();
   }
 });
 
