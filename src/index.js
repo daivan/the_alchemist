@@ -10,6 +10,11 @@ import getRecipes from './Recipes';
 import getRecipeTimerText from './RecipeTimer';
 import { createRecipeText } from './RecipeText';
 import getScreenSize from './TextCanvasResize';
+import GameState from './GameState';
+
+let gameState = new GameState(0);
+
+gameState.reset();
 
 let { canvas, context } = init();
 context.imageSmoothingEnabled = false;
@@ -113,6 +118,11 @@ let heatTemperature = Sprite({
 });
 
 onInput(['space'], function (e) {
+  if (gameState.state === 'start_screen' || gameState.state === 'game_over') {
+    gameState.gameStarted = true;
+    gameState.state = 'playing';
+  }
+
   heatTemperature.temperatureValue = heatTemperature.temperatureValue + 10;
   console.log(' *** space pressed ***')
 });
@@ -228,6 +238,7 @@ let timeElapsed = 0;
 
 let loop = GameLoop({  // create the main game loop
   update: function (dt) { // update the game state
+    gameState.update(dt);
     timeElapsed = Date.now() - startTime;
     spritesToRender.strokes.forEach(sprite => {
       sprite.update();
@@ -277,7 +288,7 @@ let loop = GameLoop({  // create the main game loop
     recipeTexts.forEach(text => text.render(textCtx, textCanvasFactor));
     heatTemperatureGoal.render();
     heatTemperature.render();
-    // recipieTimer.render();
+    gameState.render();
   }
 });
 
