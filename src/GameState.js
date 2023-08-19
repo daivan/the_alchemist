@@ -24,6 +24,7 @@ export default class GameState extends GameObjectClass{
 
 
     reset(){
+        this.gameStarted = false
         this.timePassed = 0
         this.level = 0
         this.recipe = 0
@@ -64,7 +65,7 @@ export default class GameState extends GameObjectClass{
         
         this.everySecond -= dt;
         // run every second
-        if (this.everySecond < 0) {
+        if (this.gameStarted === true && this.everySecond < 0) {
             this.timePassed++
             console.log('time passed: ', this.timePassed)
             this.everySecond = 1;
