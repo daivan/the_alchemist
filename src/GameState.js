@@ -4,9 +4,7 @@ import GameUI from './GameUI';
 
 export default class GameState extends GameObjectClass{
 
-    level = 0
     recipe = 0
-
     timePassed = 0
     clockwise = 10
     recipeTime = 0
@@ -26,7 +24,6 @@ export default class GameState extends GameObjectClass{
     reset(){
         this.gameStarted = false
         this.timePassed = 0
-        this.level = 0
         this.recipe = 0
         this.loadRecipe()
     }
@@ -34,7 +31,7 @@ export default class GameState extends GameObjectClass{
     loadRecipe() {
         if (this.recipe === 0) {
             this.clockwise = 10
-            this.recipeTime = 3
+            this.recipeTime = 60
         }
     }
 
