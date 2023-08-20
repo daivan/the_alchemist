@@ -31,17 +31,70 @@ export default class GameUI extends GameObjectClass{
         textAlign: 'center'
     });
 
+    heatTemperatureGoal = Sprite({
+        x: 238,        // starting x,y position of the sprite.
+        y: 70,
+        color: 'purple',  // fill color of the sprite rectangle
+        width: 8,     // width and height of the sprite rectangle
+        height: 30,
+    });
 
+    heatTemperature = Sprite({
+        temperatureValue: 100,
+        x: 240,        // starting x,y position of the sprite.
+        y: 10,
+        color: 'green',  // fill color of the sprite rectangle
+        width: 4,     // width and height of the sprite rectangle
+        height: 100,
+        update: function (dt) {
+          this.height = this.temperatureValue;
+          if (this.temperatureValue < 60 || this.temperatureValue > 90) {
+            this.color = 'red';
+          } else {
+            this.color = 'green';
+          }
+        }
+    });
+
+    stirTemperatureGoal = Sprite({
+        x: 248,        // starting x,y position of the sprite.
+        y: 70,
+        color: 'purple',  // fill color of the sprite rectangle
+        width: 8,     // width and height of the sprite rectangle
+        height: 30,
+    });
+
+    stirTemperature = Sprite({
+        temperatureValue: 100,
+        x: 250,        // starting x,y position of the sprite.
+        y: 10,
+        color: 'green',  // fill color of the sprite rectangle
+        width: 4,     // width and height of the sprite rectangle
+        height: 100,
+        update: function (dt) {
+          this.height = this.temperatureValue;
+          if (this.temperatureValue < 60 || this.temperatureValue > 90) {
+            this.color = 'red';
+          } else {
+            this.color = 'green';
+          }
+        }
+    });
+    
     constructor(properties) {
         super(properties)
       }
 
-    update(dt) {
-
+    update(dt, gameState) {
+        this.heatTemperature.temperatureValue = gameState.heatTemperature;
+        this.heatTemperature.update(dt);
+        this.stirTemperature.temperatureValue = gameState.stirTemperature;
+        this.stirTemperature.update(dt);
         //console.log('game ui update')
     }
 
     render(gameState) {
+
         if (gameState.state !== 'start_screen') {
 
             this.header.text = 'The Alchemist'
@@ -57,6 +110,13 @@ export default class GameUI extends GameObjectClass{
             this.overlay.render()
             this.header.render()
             this.subText.render()
+        } else {
+            this.heatTemperatureGoal.render();
+            this.heatTemperature.render();
+            this.stirTemperatureGoal.render();
+            this.stirTemperature.render();            
         }
+
+
     }
 }
