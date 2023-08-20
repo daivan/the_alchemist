@@ -72,13 +72,6 @@ initInput();
 var ladlePosition = 0;
 let isBoiling = true;
 
-let heatTemperatureGoal = Sprite({
-  x: 238,        // starting x,y position of the sprite.
-  y: 70,
-  color: 'purple',  // fill color of the sprite rectangle
-  width: 8,     // width and height of the sprite rectangle
-  height: 30,
-});
 
 // let recipieTimer = Sprite({
 //   timeGoal: 60,
@@ -99,32 +92,14 @@ let heatTemperatureGoal = Sprite({
 //   }
 // });
 
-let heatTemperature = Sprite({
-  temperatureValue: 100,
-  x: 240,        // starting x,y position of the sprite.
-  y: 10,
-  color: 'green',  // fill color of the sprite rectangle
-  width: 4,     // width and height of the sprite rectangle
-  height: 100,
-  update: function (dt) {
-    this.temperatureValue = this.temperatureValue - 10 * dt;
-    this.height = this.temperatureValue;
-    if (this.temperatureValue < 60 || this.temperatureValue > 90) {
-      this.color = 'red';
-    } else {
-      this.color = 'green';
-    }
-  }
-});
+
 
 onInput(['space'], function (e) {
+  gameState.spacePressed();
   if (gameState.state === 'start_screen' || gameState.state === 'game_over') {
     gameState.gameStarted = true;
     gameState.state = 'playing';
   }
-
-  heatTemperature.temperatureValue = heatTemperature.temperatureValue + 10;
-  console.log(' *** space pressed ***')
 });
 
 let leftUpper = Sprite({
@@ -220,6 +195,7 @@ let leftLower = Sprite({
     // handle on over events on the sprite
     if (ladlePosition === 3) {
       ladlePosition = 0;
+      gameState.addClockwiseStir();
     }
     console.log('moving out of left upper', ladlePosition)
     this.color = '#0000ff00';
@@ -250,7 +226,7 @@ let loop = GameLoop({  // create the main game loop
     if (timeElapsed < currentRecipe.time * 1000) {
       timerText.update(Math.ceil((currentRecipe.time - timeElapsed / 1000)));
     }
-    heatTemperature.update(dt);
+
     // recipieTimer.update(dt);
     dtCounter += dt;
     if (isBoiling && dtCounter > 0.1 && spritesToRender.bubbles.length < 15) {
@@ -286,8 +262,6 @@ let loop = GameLoop({  // create the main game loop
     textCtx.clearRect(0, 0, textCanvas.width, textCanvas.height);
     timerText.render(textCtx, textCanvasFactor);
     recipeTexts.forEach(text => text.render(textCtx, textCanvasFactor));
-    heatTemperatureGoal.render();
-    heatTemperature.render();
     gameState.render();
   }
 });
