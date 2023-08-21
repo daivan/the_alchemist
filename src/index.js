@@ -68,7 +68,7 @@ initPointer();
 initInput();
 
 var ladlePosition = 0;
-let isBoiling = true;
+let isBoiling = false;
 
 
 // let recipieTimer = Sprite({
@@ -213,6 +213,11 @@ let timeElapsed = 0;
 let loop = GameLoop({  // create the main game loop
   update: function (dt) { // update the game state
     gameState.update(dt);
+    if (gameState.heatTemperature > 100) {
+      isBoiling = true;
+    } else {
+      isBoiling = false;
+    }
     timeElapsed = Date.now() - startTime;
     spritesToRender.strokes.forEach(sprite => {
       sprite.update();

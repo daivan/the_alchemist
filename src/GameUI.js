@@ -3,23 +3,6 @@ import Text from './Text.js';
 
 export default class GameUI extends GameObjectClass {
 
-  // overlay = Sprite({
-  //   x: 0,
-  //   y: 0,
-  //   width: 1000,
-  //   height: 1000,
-  //   color: 'black'
-  // });
-
-  // header = Text({
-  //   text: 'The Alchemist',
-  //   font: '15px Arial',
-  //   color: 'white',
-  //   x: 256,
-  //   y: 30,
-  //   anchor: { x: 0.5, y: 0.5 },
-  //   textAlign: 'center'
-  // });
 
   header = new Text(
     'The Alchemist',
@@ -32,16 +15,6 @@ export default class GameUI extends GameObjectClass {
     'center'
   );
 
-
-  // subText = Text({
-  //   text: 'Press space to start',
-  //   font: '15px Arial',
-  //   color: 'white',
-  //   x: 256,
-  //   y: 100,
-  //   anchor: { x: 0.5, y: 0.5 },
-  //   textAlign: 'center'
-  // });
   subText = new Text(
     'Press space to start',
     15,
