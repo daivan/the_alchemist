@@ -1,5 +1,5 @@
-import { GameObjectClass, Sprite } from 'kontra';
-import Text from './Text.js';
+import { GameObjectClass, Sprite, Text } from 'kontra';
+//import Text from './Text.js';
 
 export default class GameUI extends GameObjectClass {
 
@@ -26,24 +26,43 @@ export default class GameUI extends GameObjectClass {
     'center'
   );
 
+  scoreText = new Text({
+    score: 0,
+    text: 'Score: ',
+    font: '10px Arial',
+    color: 'black',
+    x: 5,
+    y: 217,
+    textAlign: 'left'
+  });
+
+  temperatureText = new Text({
+    text: 'Heat\nStirr',
+    font: '10px Arial',
+    color: 'black',
+    x: 5,
+    y: 227,
+    textAlign: 'left'
+  });
+
   heatTemperatureGoal = Sprite({
-    x: 238,        // starting x,y position of the sprite.
-    y: 70,
-    color: 'purple',  // fill color of the sprite rectangle
-    width: 8,     // width and height of the sprite rectangle
-    height: 30,
+    x: 120,
+    y: 229,
+    color: 'purple',
+    width: 30, 
+    height: 6,
   });
 
   heatTemperature = Sprite({
     temperatureValue: 100,
-    x: 240,        // starting x,y position of the sprite.
-    y: 10,
-    color: 'green',  // fill color of the sprite rectangle
-    width: 4,     // width and height of the sprite rectangle
-    height: 100,
+    x: 50,
+    y: 230,
+    color: 'green',
+    width: 100, 
+    height: 4,
     update: function (dt) {
-      this.height = this.temperatureValue;
-      if (this.temperatureValue < 60 || this.temperatureValue > 90) {
+      this.width = this.temperatureValue;
+      if (this.temperatureValue < 70 || this.temperatureValue > 100) {
         this.color = 'red';
       } else {
         this.color = 'green';
@@ -52,23 +71,23 @@ export default class GameUI extends GameObjectClass {
   });
 
   stirTemperatureGoal = Sprite({
-    x: 248,        // starting x,y position of the sprite.
-    y: 70,
-    color: 'purple',  // fill color of the sprite rectangle
-    width: 8,     // width and height of the sprite rectangle
-    height: 30,
+    x: 120,
+    y: 239,
+    color: 'purple',
+    width: 30, 
+    height: 6,
   });
 
   stirTemperature = Sprite({
     temperatureValue: 100,
-    x: 250,        // starting x,y position of the sprite.
-    y: 10,
-    color: 'green',  // fill color of the sprite rectangle
-    width: 4,     // width and height of the sprite rectangle
-    height: 100,
+    x: 50,
+    y: 240,                
+    color: 'green',
+    width: 100, 
+    height: 4,
     update: function (dt) {
-      this.height = this.temperatureValue;
-      if (this.temperatureValue < 60 || this.temperatureValue > 90) {
+      this.width = this.temperatureValue;
+      if (this.temperatureValue < 70 || this.temperatureValue > 100) {
         this.color = 'red';
       } else {
         this.color = 'green';
@@ -85,7 +104,6 @@ export default class GameUI extends GameObjectClass {
     this.heatTemperature.update(dt);
     this.stirTemperature.temperatureValue = gameState.stirTemperature;
     this.stirTemperature.update(dt);
-    //console.log('game ui update')
   }
 
   render(gameState) {
@@ -102,16 +120,15 @@ export default class GameUI extends GameObjectClass {
     }
 
     if (gameState.state !== 'playing') {
-      // this.overlay.render()
       this.header.render(gameState.textCtx, gameState.scaleFactor, 'black');
       this.subText.render(gameState.textCtx, gameState.scaleFactor)
     } else {
-      this.heatTemperatureGoal.render();
-      this.heatTemperature.render();
-      this.stirTemperatureGoal.render();
-      this.stirTemperature.render();
+      this.temperatureText.render()
+      this.heatTemperatureGoal.render()
+      this.heatTemperature.render()
+      this.stirTemperatureGoal.render()
+      this.stirTemperature.render()
+      this.scoreText.render()
     }
-
-
   }
 }

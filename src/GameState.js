@@ -24,6 +24,7 @@ export default class GameState extends GameObjectClass {
 
     textCtx;
     scaleFactor;
+    score = 0
 
     constructor(properties, textCtx, scaleFactor) {
         super(properties)
@@ -32,6 +33,9 @@ export default class GameState extends GameObjectClass {
     }
 
 
+    emittedHello() {
+        console.log('we did good')
+    }
     spacePressed() {
         if (this.gameStarted === true) {
             this.heatTemperature = this.heatTemperature + 10
@@ -50,6 +54,7 @@ export default class GameState extends GameObjectClass {
         this.gameStarted = false
         this.timePassed = 0
         this.recipe = 0
+        this.score = 0
         this.loadRecipe()
     }
 
@@ -86,10 +91,18 @@ export default class GameState extends GameObjectClass {
         if (this.gameStarted === true && this.everySecond < 0) {
             this.timePassed++
             this.everySecond = 1;
-            this.heatTemperature = this.heatTemperature - 3
-            this.stirTemperature = this.stirTemperature - 3
             this.isGameOver()
         }
+        if (this.gameStarted === true) {
+            if (this.heatTemperature > 1) {
+                this.heatTemperature = this.heatTemperature - 5 * dt
+            }
+            if (this.stirTemperature > 1) {
+                this.stirTemperature = this.stirTemperature - 5 * dt
+            }
+            
+        }
+        
     }
 
     render() {

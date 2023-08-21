@@ -1,4 +1,4 @@
-import { initInput, onInput, initPointer, track, init, Sprite, GameLoop, getPointer } from 'kontra';
+import { initInput, onInput, initPointer, track, init, Sprite, GameLoop, getPointer, on, emit } from 'kontra';
 import { loadAsset, spliceAssets } from './AssetsLoader';
 import drawWater from './DrawWater';
 import getSprite from './Sprites/Sprite';
@@ -38,6 +38,7 @@ let gameState = new GameState(0, textCtx, textCanvasFactor);
 
 gameState.reset();
 
+
 const allSprites = await loadAsset();
 const assets = spliceAssets(allSprites);
 
@@ -69,28 +70,6 @@ initInput();
 
 var ladlePosition = 0;
 let isBoiling = false;
-
-
-// let recipieTimer = Sprite({
-//   timeGoal: 60,
-//   timeLeft: 60,
-//   x: 10,        // starting x,y position of the sprite.
-//   y: 240,
-//   color: 'green',  // fill color of the sprite rectangle
-//   width: 240,     // width and height of the sprite rectangle
-//   height: 4,
-//   update: function (dt) {
-//     this.timeLeft = this.timeLeft - 3 * dt;
-//     this.width = 240 - ((this.timeLeft / this.timeGoal) * 240);
-//     if (this.timeLeft < 30) {
-//       this.color = 'orange';
-//     } else if (this.timeLeft < 15) {
-//       this.color = 'red';
-//     }
-//   }
-// });
-
-
 
 onInput(['space'], function (e) {
   gameState.spacePressed();
@@ -275,4 +254,11 @@ loop.start();    // start the game
 function addStroke(scale = 1) {
   const pointer = getPointer();
   spritesToRender.strokes.push(getSprite(strokeSpritesheet, Math.floor(pointer.x), Math.floor(pointer.y), scale));
+}
+
+on('myEvent', gameState.emittedHello);
+emit('myEvent', 1, 2, 3);  //=> {a: 1, b: 2, c: 3}
+
+function callback(a, b, c) {
+  console.log({a, b, c});
 }
