@@ -16,6 +16,7 @@ export default class GameState extends GameObjectClass {
 
     heatTemperature = 0
     heatTemperatureGoal = 0
+    isBoiling = false
 
     stirTemperature = 0
     stirTemperatureGoal = 0
@@ -80,6 +81,11 @@ export default class GameState extends GameObjectClass {
 
     update(dt) {
         this.gameUI.update(dt, this)
+        if (this.heatTemperature > 100) {
+            this.isBoiling = true
+        } else {
+            this.isBoiling = false
+        }
 
         this.everySecond -= dt;
         // run every second
