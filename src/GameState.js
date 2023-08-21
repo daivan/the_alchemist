@@ -2,7 +2,7 @@ import { GameObjectClass } from 'kontra';
 
 import GameUI from './GameUI';
 
-export default class GameState extends GameObjectClass{
+export default class GameState extends GameObjectClass {
 
     recipe = 0
     timePassed = 0
@@ -22,26 +22,31 @@ export default class GameState extends GameObjectClass{
 
     gameUI = new GameUI()
 
-    constructor(properties) {
+    textCtx;
+    scaleFactor;
+
+    constructor(properties, textCtx, scaleFactor) {
         super(properties)
-      }
+        this.textCtx = textCtx;
+        this.scaleFactor = scaleFactor;
+    }
 
 
-    spacePressed(){
+    spacePressed() {
         if (this.gameStarted === true) {
             this.heatTemperature = this.heatTemperature + 10
             console.log('space pressed: ', this.heatTemperature)
         }
     }
 
-    addClockwiseStir(){
+    addClockwiseStir() {
         if (this.gameStarted === true) {
             this.stirTemperature = this.stirTemperature + 10
             console.log('Rotated: ', this.stirTemperature)
         }
     }
 
-    reset(){
+    reset() {
         this.gameStarted = false
         this.timePassed = 0
         this.recipe = 0
@@ -55,18 +60,18 @@ export default class GameState extends GameObjectClass{
         }
     }
 
-    isGameOver(){
+    isGameOver() {
         if (this.timePassed > this.recipeTime) {
             this.gameOver()
         }
     }
 
-    gameOver(){
+    gameOver() {
         this.reset()
         this.state = 'game_over'
     }
 
-    isRecipeComplete(){
+    isRecipeComplete() {
         if (this.clockwise === 0) {
             return true
         }
@@ -75,7 +80,7 @@ export default class GameState extends GameObjectClass{
 
     update(dt) {
         this.gameUI.update(dt, this)
-        
+
         this.everySecond -= dt;
         // run every second
         if (this.gameStarted === true && this.everySecond < 0) {
@@ -88,6 +93,6 @@ export default class GameState extends GameObjectClass{
     }
 
     render() {
-        this.gameUI.render(this)
+        this.gameUI.render(this);
     }
 }

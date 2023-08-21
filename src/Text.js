@@ -2,7 +2,7 @@ export default class Text {
     constructor(text, size, font, color, x, y, anchor, textAlign) {
         this.text = text;
         this.size = size;
-        this.font = `${size}px ${font}`;
+        this.font = font;
         this.color = color;
         this.x = x;
         this.y = y;
@@ -14,7 +14,14 @@ export default class Text {
         this.text = newText;
     }
 
-    render(context, scaleFactor) {
+    render(context, scaleFactor, backgroundColor = null) {
+        if (backgroundColor) {
+            context.fillStyle = backgroundColor;
+            context.fillRect(
+                0, 0, context.canvas.width, context.canvas.height
+            );
+        }
+        const sizeAdjusted = this.size * scaleFactor;
         context.save(); // Save the current context state
 
         // Handle the anchor and text alignment
@@ -27,7 +34,7 @@ export default class Text {
         }
 
         context.textAlign = this.textAlign;
-        context.font = this.font;
+        context.font = `${sizeAdjusted}px ${this.font}`;
         context.fillStyle = this.color;
 
         //if this.text is not a string convert it to a string
@@ -39,7 +46,7 @@ export default class Text {
 
         // Draw each line separately
         for (let i = 0; i < lines.length; i++) {
-            const lineY = this.y * scaleFactor + i * this.size; // Calculate Y position for each line
+            const lineY = this.y * scaleFactor + i * sizeAdjusted; // Calculate Y position for each line
             context.fillText(lines[i], this.x * scaleFactor, lineY); // Draw the line
         }
 

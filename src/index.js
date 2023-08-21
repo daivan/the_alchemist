@@ -12,9 +12,6 @@ import { createRecipeText } from './RecipeText';
 import getScreenSize from './TextCanvasResize';
 import GameState from './GameState';
 
-let gameState = new GameState(0);
-
-gameState.reset();
 
 let { canvas, context } = init();
 context.imageSmoothingEnabled = false;
@@ -30,16 +27,16 @@ const backgroundCanvas = document.getElementById('background');
 const backgroundCtx = backgroundCanvas.getContext('2d');
 const backgroundPattern = backgroundCtx.createPattern(getBackgroundPattern(), "repeat");
 backgroundCtx.fillStyle = backgroundPattern;
-backgroundCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
 const textCanvas = document.getElementById('text');
-console.log(textCanvas);
 const [textWidth, textHeight] = getScreenSize();
-console.log(textWidth, textHeight);
 textCanvas.width = textWidth;
 textCanvas.height = textHeight;
 const textCtx = textCanvas.getContext('2d');
 const textCanvasFactor = textCanvas.width / 512;
+let gameState = new GameState(0, textCtx, textCanvasFactor);
+
+gameState.reset();
 
 const allSprites = await loadAsset();
 const assets = spliceAssets(allSprites);
@@ -57,6 +54,7 @@ const spritesToRender = {
   strokes: [],
   bubbles: []
 };
+backgroundCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
 const recipes = getRecipes();
 let currentRecipe = recipes[1];

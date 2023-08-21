@@ -3,7 +3,7 @@ import Text from './Text';
 export default function getRecipeTimerText(time) {
     let text = new Text(
         time,
-        32,
+        16,
         'Arial',
         '#1f2e38',
         32,
