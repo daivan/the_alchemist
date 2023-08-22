@@ -12,7 +12,6 @@ import { createRecipeText } from './RecipeText';
 import getScreenSize from './TextCanvasResize';
 import GameState from './GameState';
 
-
 let { canvas, context } = init();
 context.imageSmoothingEnabled = false;
 
@@ -37,6 +36,7 @@ const textCanvasFactor = textCanvas.width / 512;
 let gameState = new GameState(0, textCtx, textCanvasFactor);
 
 gameState.reset();
+
 
 const allSprites = await loadAsset();
 const assets = spliceAssets(allSprites);
@@ -68,28 +68,6 @@ initPointer();
 initInput();
 
 var ladlePosition = 0;
-
-
-
-// let recipieTimer = Sprite({
-//   timeGoal: 60,
-//   timeLeft: 60,
-//   x: 10,        // starting x,y position of the sprite.
-//   y: 240,
-//   color: 'green',  // fill color of the sprite rectangle
-//   width: 240,     // width and height of the sprite rectangle
-//   height: 4,
-//   update: function (dt) {
-//     this.timeLeft = this.timeLeft - 3 * dt;
-//     this.width = 240 - ((this.timeLeft / this.timeGoal) * 240);
-//     if (this.timeLeft < 30) {
-//       this.color = 'orange';
-//     } else if (this.timeLeft < 15) {
-//       this.color = 'red';
-//     }
-//   }
-// });
-
 
 
 onInput(['space'], function (e) {
