@@ -1,4 +1,4 @@
-import { initInput, onInput, initPointer, track, init, Sprite, GameLoop, getPointer, on, emit } from 'kontra';
+import { initInput, onInput, initPointer, track, init, Sprite, GameLoop, getPointer } from 'kontra';
 import { loadAsset, spliceAssets } from './AssetsLoader';
 import drawWater from './DrawWater';
 import getSprite from './Sprites/Sprite';
@@ -11,7 +11,6 @@ import getRecipeTimerText from './RecipeTimer';
 import { createRecipeText } from './RecipeText';
 import getScreenSize from './TextCanvasResize';
 import GameState from './GameState';
-
 
 let { canvas, context } = init();
 context.imageSmoothingEnabled = false;
@@ -254,11 +253,4 @@ loop.start();    // start the game
 function addStroke(scale = 1) {
   const pointer = getPointer();
   spritesToRender.strokes.push(getSprite(strokeSpritesheet, Math.floor(pointer.x), Math.floor(pointer.y), scale));
-}
-
-on('myEvent', gameState.emittedHello);
-emit('myEvent', 1, 2, 3);  //=> {a: 1, b: 2, c: 3}
-
-function callback(a, b, c) {
-  console.log({a, b, c});
 }

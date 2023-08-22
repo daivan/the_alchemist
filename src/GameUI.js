@@ -1,8 +1,6 @@
 import { GameObjectClass, Sprite, Text } from 'kontra';
-//import Text from './Text.js';
 
 export default class GameUI extends GameObjectClass {
-
 
   header = new Text(
     'The Alchemist',
