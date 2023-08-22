@@ -77,6 +77,15 @@ onInput(['space'], function (e) {
     gameState.state = 'playing';
   }
 });
+onInput(['1'], function (e) {
+  gameState.onePressed();
+});
+onInput(['2'], function (e) {
+  gameState.twoPressed();
+});
+onInput(['3'], function (e) {
+  gameState.threePressed();
+});
 
 let leftUpper = Sprite({
   x: 28,        // starting x,y position of the sprite.

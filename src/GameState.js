@@ -23,6 +23,16 @@ export default class GameState extends GameObjectClass {
 
     gameUI = new GameUI()
 
+    ingredients = [
+        'correct ingredient',
+        'wrong ingredient',
+        'really wrong ingredient',
+    ]
+
+    goodIngredients = [
+        'correct ingredient'
+    ]
+
     textCtx;
     scaleFactor;
     score = 0
@@ -33,14 +43,41 @@ export default class GameState extends GameObjectClass {
         this.scaleFactor = scaleFactor;
     }
 
-
-    emittedHello() {
-        console.log('we did good')
-    }
     spacePressed() {
         if (this.gameStarted === true) {
             this.heatTemperature = this.heatTemperature + 10
             console.log('space pressed: ', this.heatTemperature)
+        }
+    }
+
+    onePressed() {
+        if (this.gameStarted === true) {
+            if (this.goodIngredients.includes(this.ingredients[0])) {
+                this.score = this.score + 10
+            }else {
+                this.score = this.score - 10
+            }
+            this.ingredients = this.ingredients.sort((a, b) => 0.5 - Math.random());
+        }
+    }
+    twoPressed() {
+        if (this.gameStarted === true) {
+            if (this.goodIngredients.includes(this.ingredients[1])) {
+                this.score = this.score + 10
+            }else {
+                this.score = this.score - 50
+            }
+            this.ingredients = this.ingredients.sort((a, b) => 0.5 - Math.random());
+        }
+    }
+    threePressed() {
+        if (this.gameStarted === true) {
+            if (this.goodIngredients.includes(this.ingredients[2])) {
+                this.score = this.score + 10
+            }else {
+                this.score = this.score - 50
+            }
+            this.ingredients = this.ingredients.sort((a, b) => 0.5 - Math.random());
         }
     }
 
@@ -97,6 +134,14 @@ export default class GameState extends GameObjectClass {
         if (this.gameStarted === true && this.everySecond < 0) {
             this.timePassed++
             this.everySecond = 1;
+            if (this.heatTemperature > 70 && this.heatTemperature < 100) {
+                this.score = this.score + 1
+            }
+            if (this.stirTemperature > 70 && this.stirTemperature < 100) {
+                this.score = this.score + 1
+            }
+            this.heatTemperature = this.heatTemperature - 5 * dt
+            
             this.isGameOver()
         }
         if (this.gameStarted === true) {

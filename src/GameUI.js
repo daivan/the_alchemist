@@ -24,6 +24,15 @@ export default class GameUI extends GameObjectClass {
     'center'
   );
 
+  ingredientsText = new Text({
+    text: '',
+    font: '10px Arial',
+    color: 'black',
+    x: 280,
+    y: 185,
+    textAlign: 'left'
+  });
+
   scoreText = new Text({
     score: 0,
     text: 'Score: ',
@@ -31,8 +40,13 @@ export default class GameUI extends GameObjectClass {
     color: 'black',
     x: 5,
     y: 217,
-    textAlign: 'left'
+    textAlign: 'left',
+    update: function (dt) {
+      this.text = 'Score: ' + this.score;
+
+    }
   });
+
 
   temperatureText = new Text({
     text: 'Heat\nStirr',
@@ -98,6 +112,12 @@ export default class GameUI extends GameObjectClass {
   }
 
   update(dt, gameState) {
+    this.ingredientsText.text = gameState.ingredients.map((ingredient, index) => {
+      return `${index + 1}: ${ingredient}`
+    }).join('\n');
+
+    this.scoreText.score = gameState.score;
+    this.scoreText.update(dt);
     this.heatTemperature.temperatureValue = gameState.heatTemperature;
     this.heatTemperature.update(dt);
     this.stirTemperature.temperatureValue = gameState.stirTemperature;
@@ -127,6 +147,7 @@ export default class GameUI extends GameObjectClass {
       this.stirTemperatureGoal.render()
       this.stirTemperature.render()
       this.scoreText.render()
+      this.ingredientsText.render()
     }
   }
 }
