@@ -1,7 +1,7 @@
-import Text from './Text.js';
+import CustomText from './CustomText.js';
 
 export function createRecipeText(text, x, y) {
-    return new Text(
+    return new CustomText(
         text,
         7,
         'Old Standard TT',

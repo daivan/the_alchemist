@@ -1,7 +1,7 @@
-import Text from './Text';
+import CustomText from './CustomText';
 
 export default function getRecipeTimerText(time) {
-    let text = new Text(
+    let text = new CustomText(
         time,
         16,
         'Arial',

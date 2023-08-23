@@ -1,8 +1,11 @@
 import { GameObjectClass, Sprite, Text } from 'kontra';
 
+import CustomText from './CustomText.js';
+
 export default class GameUI extends GameObjectClass {
 
-  header = new Text(
+  
+  header = new CustomText(
     'The Alchemist',
     15,
     'Arial',
@@ -13,7 +16,7 @@ export default class GameUI extends GameObjectClass {
     'center'
   );
 
-  subText = new Text(
+  subText = new CustomText(
     'Press space to start',
     15,
     'Arial',
