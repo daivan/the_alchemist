@@ -1,4 +1,5 @@
 import { initInput, onInput, initPointer, track, init, Sprite, GameLoop, getPointer } from 'kontra';
+import { zzfx } from 'zzfx';
 import { loadAsset, spliceAssets } from './AssetsLoader';
 import drawWater from './DrawWater';
 import getSprite from './Sprites/Sprite';
@@ -75,6 +76,7 @@ onInput(['space'], function (e) {
   if (gameState.state === 'start_screen' || gameState.state === 'game_over') {
     gameState.gameStarted = true;
     gameState.state = 'playing';
+    zzfx(...[1.29,,63,,.02,.04,4,.4,,-0.1,-50,,,-0.1,1,.6,.01,,.09,.17]); // Random 0 - Mutation 1
   }
 });
 onInput(['1'], function (e) {
