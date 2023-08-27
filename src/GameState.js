@@ -9,6 +9,8 @@ export default class GameState extends GameObjectClass {
     clockwise = 10
     recipeTime = 0
 
+    timeLeft = 0
+
     everySecond = 1;
 
     state = 'start_screen'
@@ -33,14 +35,10 @@ export default class GameState extends GameObjectClass {
         'correct ingredient'
     ]
 
-    textCtx;
-    scaleFactor;
     score = 0
 
-    constructor(properties, textCtx, scaleFactor) {
+    constructor(properties) {
         super(properties)
-        this.textCtx = textCtx;
-        this.scaleFactor = scaleFactor;
     }
 
     spacePressed() {
@@ -99,12 +97,12 @@ export default class GameState extends GameObjectClass {
     loadRecipe() {
         if (this.recipe === 0) {
             this.clockwise = 10
-            this.recipeTime = 60
+            this.timeLeft = 10
         }
     }
 
     isGameOver() {
-        if (this.timePassed > this.recipeTime) {
+        if (this.timeLeft < 0) {
             this.gameOver()
         }
     }
@@ -132,7 +130,7 @@ export default class GameState extends GameObjectClass {
         this.everySecond -= dt;
         // run every second
         if (this.gameStarted === true && this.everySecond < 0) {
-            this.timePassed++
+            this.timeLeft--
             this.everySecond = 1;
             if (this.heatTemperature > 70 && this.heatTemperature < 100) {
                 this.score = this.score + 1

@@ -15,6 +15,7 @@ export default class CustomText {
     }
 
     render(context, scaleFactor, backgroundColor = null) {
+        /*
         if (backgroundColor) {
             context.fillStyle = backgroundColor;
             context.fillRect(
@@ -51,5 +52,6 @@ export default class CustomText {
         }
 
         context.restore(); // Restore the context state
+        */
     }
 }
